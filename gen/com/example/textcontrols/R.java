@@ -1195,7 +1195,9 @@ containing a value of this type.
     }
     public static final class raw {
         public static final int final1=0x7f050000;
-        public static final int text1=0x7f050001;
+        public static final int final2=0x7f050001;
+        public static final int text1=0x7f050002;
+        public static final int text2=0x7f050003;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 

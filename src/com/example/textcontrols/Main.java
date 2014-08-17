@@ -38,7 +38,7 @@ public class Main extends Activity implements View.OnLongClickListener{
 		setContentView(R.layout.main);
 		
 		XMLParser xmlParser = new XMLParser();
-		InputStream XmlFileInputStream = getResources().openRawResource(R.raw.text1); // getting XML file stream.
+		InputStream XmlFileInputStream = getResources().openRawResource(R.raw.text2); // getting XML file stream.
 		// String[] Input = { "One"," thing"," was"," certain,"," that"," the"," WHITE"," kitten"," had"," had"," nothing"," to"," do"," with"," it:—it"," was"," the"," black"," kitten's"," fault"," entirely."," For"," the"," white"," kitten"," had"," been"," having"," its"," face"," washed"," by"," the"," old"," cat"," for"," the"," last"," quarter"," of"," an"," hour"," (and"," bearing"," it"," pretty"," well,"," considering);"," so"," you"," see"," that"," it"," COULDN'T"," have"," had"," any"," hand"," in"," the"," mischief.","One"," thing"," was"," certain,"," that"," the"," WHITE"," kitten"," had"," had"," nothing"," to"," do"," with"," it:—it"," was"," the"," black"," kitten's"," fault"," entirely."," For"," the"," white"," kitten"," had"," been"," having"," its"," face"," washed"," by"," the"," old"," cat"," for"," the"," last"," quarter"," of"," an"," hour"," (and"," bearing"," it"," pretty"," well,"," considering);"," so"," you"," see"," that"," it"," COULDN'T"," have"," had"," any"," hand"," in"," the"," mischief.","One"," thing"," was"," certain,"," that"," the"," WHITE"," kitten"," had"," had"," nothing"," to"," do"," with"," it:—it"," was"," the"," black"," kitten's"," fault"," entirely."," For"," the"," white"," kitten"," had"," been"," having"," its"," face"," washed"," by"," the"," old"," cat"," for"," the"," last"," quarter"," of"," an"," hour"," (and"," bearing"," it"," pretty"," well,"," considering);"," so"," you"," see"," that"," it"," COULDN'T"," have"," had"," any"," hand"," in"," the"," mischief."}; 
 		final XMLWords[] Input = xmlParser.getWords(XmlFileInputStream);
 		final int textLength = Input.length;
@@ -87,7 +87,8 @@ public class Main extends Activity implements View.OnLongClickListener{
 		}
 		ly.addView(llAlso);
 				
-		// tview[0].setTextColor(Color.RED);
+		player = MediaPlayer.create(this, R.raw.final2);
+		player.start();
 	
 		final Handler handler = new Handler();
 		handler.post( new Runnable(){ 
@@ -96,7 +97,7 @@ public class Main extends Activity implements View.OnLongClickListener{
 		    public void run() {
 		    	if (k == -1) {
 		    		k++;
-		    		handler.postDelayed(this, Input[0].startTime);
+		    		handler.postDelayed(this, (9000));
 		    	}
 		    	
 		    	else {
@@ -105,7 +106,7 @@ public class Main extends Activity implements View.OnLongClickListener{
 		    		}
 		    		tview[k].setTextColor(Color.CYAN);
 
-		    		int textDuration = (Input[k].endTime - Input[k].startTime) * 100 ;
+		    		int textDuration = (Input[k+1].startTime - Input[k].startTime) * 10 ;
 
 		    		k++;
 		    		if( k < textLength )
@@ -116,9 +117,6 @@ public class Main extends Activity implements View.OnLongClickListener{
 		    	}
 		    }
 		});  
-		
-		player = MediaPlayer.create(this, R.raw.final1);
-		player.start();
 		
 	}
 	@Override
