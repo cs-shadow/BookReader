@@ -37,17 +37,15 @@ public class Main extends Activity implements View.OnLongClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		player = MediaPlayer.create(this, R.raw.final1);
-		player.start();
-		
 		XMLParser xmlParser = new XMLParser();
 		InputStream XmlFileInputStream = getResources().openRawResource(R.raw.text1); // getting XML file stream.
 		// String[] Input = { "One"," thing"," was"," certain,"," that"," the"," WHITE"," kitten"," had"," had"," nothing"," to"," do"," with"," it:—it"," was"," the"," black"," kitten's"," fault"," entirely."," For"," the"," white"," kitten"," had"," been"," having"," its"," face"," washed"," by"," the"," old"," cat"," for"," the"," last"," quarter"," of"," an"," hour"," (and"," bearing"," it"," pretty"," well,"," considering);"," so"," you"," see"," that"," it"," COULDN'T"," have"," had"," any"," hand"," in"," the"," mischief.","One"," thing"," was"," certain,"," that"," the"," WHITE"," kitten"," had"," had"," nothing"," to"," do"," with"," it:—it"," was"," the"," black"," kitten's"," fault"," entirely."," For"," the"," white"," kitten"," had"," been"," having"," its"," face"," washed"," by"," the"," old"," cat"," for"," the"," last"," quarter"," of"," an"," hour"," (and"," bearing"," it"," pretty"," well,"," considering);"," so"," you"," see"," that"," it"," COULDN'T"," have"," had"," any"," hand"," in"," the"," mischief.","One"," thing"," was"," certain,"," that"," the"," WHITE"," kitten"," had"," had"," nothing"," to"," do"," with"," it:—it"," was"," the"," black"," kitten's"," fault"," entirely."," For"," the"," white"," kitten"," had"," been"," having"," its"," face"," washed"," by"," the"," old"," cat"," for"," the"," last"," quarter"," of"," an"," hour"," (and"," bearing"," it"," pretty"," well,"," considering);"," so"," you"," see"," that"," it"," COULDN'T"," have"," had"," any"," hand"," in"," the"," mischief."}; 
-		String[] Input = xmlParser.getWords(XmlFileInputStream);
+		final XMLWords[] Input = xmlParser.getWords(XmlFileInputStream);
+		final int textLength = Input.length;
 		
 		LinearLayout ly = (LinearLayout) findViewById(R.id.LinearLayout1);
 		
-		final TextView[] tview = new TextView[1000];
+		final TextView[] tview = new TextView[textLength];
 		LinearLayout llAlso = new LinearLayout(this);
 		llAlso.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT));
@@ -60,10 +58,10 @@ public class Main extends Activity implements View.OnLongClickListener{
 		int widthsofar=0;
 		int k =0;
 		
-		for(int i=0;i<180;i++)
+		for(int i=0;i<textLength;i++)
 		{
 			tview[i] = new TextView(this);
-			tview[i].setText(Input[i]);
+			tview[i].setText(Input[i].token + " ");
 			
 			tview[i].setOnLongClickListener((OnLongClickListener) this);
 			
@@ -89,24 +87,38 @@ public class Main extends Activity implements View.OnLongClickListener{
 		}
 		ly.addView(llAlso);
 				
-		tview[0].setTextColor(Color.RED);
+		// tview[0].setTextColor(Color.RED);
 	
 		final Handler handler = new Handler();
 		handler.post( new Runnable(){ 
-		    private int k = 1;
+		    private int k = -1;
 
 		    public void run() {
-		    	tview[k-1].setTextColor(Color.BLACK);
-				tview[k].setTextColor(Color.CYAN);
-		        
-				k++;
-		        if( k < 180 )
-		        {
-		            // Here `this` refers to the anonymous `Runnable`
-		            handler.postDelayed(this, 500);
-		        }
+		    	if (k == -1) {
+		    		k++;
+		    		handler.postDelayed(this, Input[0].startTime);
+		    	}
+		    	
+		    	else {
+		    		if (k > 0) {
+		    			tview[k-1].setTextColor(Color.BLACK);
+		    		}
+		    		tview[k].setTextColor(Color.CYAN);
+
+		    		int textDuration = (Input[k].endTime - Input[k].startTime) * 100 ;
+
+		    		k++;
+		    		if( k < textLength )
+		    		{
+		    			// Here `this` refers to the anonymous `Runnable`
+		    			handler.postDelayed(this, textDuration);
+		    		}
+		    	}
 		    }
 		});  
+		
+		player = MediaPlayer.create(this, R.raw.final1);
+		player.start();
 		
 	}
 	@Override

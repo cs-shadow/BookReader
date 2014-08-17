@@ -17,7 +17,7 @@ import java.io.StringReader;
 
 public class XMLParser {
 
-	public String[] getWords(InputStream xmlFileStream) {
+	public XMLWords[] getWords(InputStream xmlFileStream) {
 
 		try {
 
@@ -37,21 +37,26 @@ public class XMLParser {
 			doc.getDocumentElement().normalize();
 
 			NodeList nList = doc.getElementsByTagName("PAIR");
-			String[] words = new String[nList.getLength()];
+			XMLWords[] words = new XMLWords[nList.getLength()];
 
 			for (int i = 0; i < nList.getLength(); i++) {
 
 				Node nNode = nList.item(i);
 				Element eElement = (Element) nNode;
-
-				words[i] = eElement.getElementsByTagName("TOKEN").item(0).getTextContent();
+				
+//				words[i] = eElement.getElementsByTagName("TOKEN").item(0).getTextContent();
+				String token = eElement.getElementsByTagName("TOKEN").item(0).getTextContent();
+				int startTime = Integer.parseInt(eElement.getElementsByTagName("START").item(0).getTextContent());
+				int endTime = Integer.parseInt(eElement.getElementsByTagName("END").item(0).getTextContent());
+				
+				words[i] = new XMLWords(token, startTime, endTime);
 			}
 
 			return words;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new String[0];
+		return new XMLWords[0];
 	}
 
 }
