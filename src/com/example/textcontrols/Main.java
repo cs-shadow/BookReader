@@ -1,10 +1,12 @@
 package com.example.textcontrols;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.xmlpull.v1.XmlPullParser;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +29,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Main extends Activity implements View.OnLongClickListener{
 	
@@ -146,9 +152,44 @@ public class Main extends Activity implements View.OnLongClickListener{
 	public boolean onLongClick(View v)
 	{
 		TextView tv = (TextView) v;
-	    Toast.makeText(this,"Meaning of "+tv.getText().toString(),Toast.LENGTH_LONG).show();
+		
+	    Toast.makeText(this, getMeaning(tv.getText().toString(), getBaseContext()),Toast.LENGTH_LONG).show();
+	    
 	    return true;
 	}
+	
+	protected String getMeaning(String word, Context context)
+	{
+		InputStream jsonInputStream = null;
+		String filename = "gcide_" + word.charAt(0) + ".json";
+		// Capitalize word according to dictionary format.
+		word = Character.toUpperCase(word.charAt(0)) + word.substring(1);
+		// Remove last character, i.e. space from word.
+		word = word.substring(0, word.length()-1);
+		try {
+			jsonInputStream = context.getAssets().open(filename);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String jsonString = convertStreamToString(jsonInputStream);
+		
+		try {
+			JSONObject root = new JSONObject(jsonString);
+			String meaning = root.getString(word);
+			return meaning;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "Meaning not found";
+	}
 
-
+	protected String convertStreamToString(java.io.InputStream is) {
+	    @SuppressWarnings("resource")
+		java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+	    return s.hasNext() ? s.next() : "";
+	}
+	
 }
