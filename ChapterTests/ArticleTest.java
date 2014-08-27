@@ -21,6 +21,8 @@ public class ArticleTest {
     int length = sentences.length;
 
     int choice = 1;
+    int ctr = 0;
+    int correct = 0;
     while (choice == 1) {
       // Select a sentence randomly that contains at least one article.
       int idx = Math.abs(random.nextInt())%length;
@@ -57,6 +59,7 @@ public class ArticleTest {
       String input = istream.nextLine();
       if (input.equals(answer)) {
         System.out.println("Correct Answer!");
+        correct++;
       } else {
         System.out.println("Wrong Answer! Correct answer is: '" + answer + "'.");
       }
@@ -64,7 +67,11 @@ public class ArticleTest {
       System.out.print("\n\nDo you want to continue (Enter '1' for Yes, '0' for No): ");
       choice = istream.nextInt();
       istream.nextLine();
+
+      ctr++;
     }
+
+    System.out.println("\n\n" + correct + " correct answers out of " + ctr + " questions.\n\n");
   }
 
   /**
