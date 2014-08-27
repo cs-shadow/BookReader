@@ -20,43 +20,50 @@ public class ArticleTest {
     String[] sentences = text.split("\\.");
     int length = sentences.length;
 
-    // Select a sentence randomly that contains at least one article.
-    int idx = Math.abs(random.nextInt())%length;
-    while (!checkArticles(sentences[idx])) {
-      idx = Math.abs(random.nextInt())%length;
-    }
-    String sentence = sentences[idx];
-
-    // Create a copy of the sentence and delete an article.
-    String[] words = sentence.split("\\s+");
-    int i;
-    for (i=0; i<words.length; i++) {
-      String word = words[i];
-      if (word.equals("a") || word.equals("an") || word.equals("the")) {
-        break;
+    int choice = 1;
+    while (choice == 1) {
+      // Select a sentence randomly that contains at least one article.
+      int idx = Math.abs(random.nextInt())%length;
+      while (!checkArticles(sentences[idx])) {
+        idx = Math.abs(random.nextInt())%length;
       }
-    }
-    String answer = words[i];
-    words[i] = new String("_____");
+      String sentence = sentences[idx];
 
-    String question = "";
-    for (i=0; i<words.length; i++) {
-      question += words[i];
-      if (i == words.length - 1) {
-        question += ".\n";
+      // Create a copy of the sentence and delete an article.
+      String[] words = sentence.split("\\s+");
+      int i;
+      for (i=0; i<words.length; i++) {
+        String word = words[i];
+        if (word.equals("a") || word.equals("an") || word.equals("the")) {
+          break;
+        }
+      }
+      String answer = words[i];
+      words[i] = new String("_____");
+
+      String question = "";
+      for (i=0; i<words.length; i++) {
+        question += words[i];
+        if (i == words.length - 1) {
+          question += ".\n";
+        } else {
+          question += " ";
+        }
+      }
+
+      System.out.println("\n\nFill in the blank with correct article: 'a', 'an' or 'the':\n");
+      System.out.println(question);
+      System.out.print("Your answer (Enter 'a', 'an' or 'the'): ");
+      String input = istream.nextLine();
+      if (input.equals(answer)) {
+        System.out.println("Correct Answer!");
       } else {
-        question += " ";
+        System.out.println("Wrong Answer! Correct answer is: '" + answer + "'.");
       }
-    }
 
-    System.out.println("Fill in the blank with correct article: 'a', 'an' or 'the':\n");
-    System.out.println(question);
-    System.out.print("Your answer (Enter 'a', 'an' or 'the'): ");
-    String input = istream.nextLine();
-    if (input.equals(answer)) {
-      System.out.println("Correct Answer!");
-    } else {
-      System.out.println("Wrong Answer! Correct answer is: '" + answer + "'.");
+      System.out.print("\n\nDo you want to continue (Enter '1' for Yes, '0' for No): ");
+      choice = istream.nextInt();
+      istream.nextLine();
     }
   }
 
